@@ -40,17 +40,42 @@ def GoodAdventureOpenerIndatha(decksize, swamp_sources, forest_sources, plains_s
     p_ei = CardDrawnProbability(decksize, 4, 7, 1, 2, on_play)
     p_fk = CardDrawnProbability(decksize, 4, 7, 1, 2, on_play)
     p_a1 = p_1s * p_1g * p_ei * p_fk
+    print("edgewall + foulmire: ", p_a1)
 
     # lovestruck
     p_1g = CardDrawnProbability(decksize, forest_sources, 7, 1, 2, on_play)
-    p_2c = CardDrawnProbability(decksize, colorless_sources, 7, 2, 3, on_play)
+    p_2c = CardDrawnProbability(decksize - 1, colorless_sources - 1, 7, 2, 3, on_play)
     p_ls = CardDrawnProbability(decksize, 4, 7, 1, 3, on_play)
     p_a2 = p_1g * p_2c * p_ls
+    print("lovestruck: ", p_a2)
 
     return p_a1 + p_a2
     
-    
-    
+def GoodOpenerEerionAdventures(decksize, swamp_sources, forest_sources, plains_sources, colorless_sources, on_play):
+    p_adv = GoodAdventureOpenerIndatha(decksize, swamp_sources, forest_sources, plains_sources, colorless_sources, on_play)
+
+    # 2x birth of meletis
+    p_1p = CardDrawnProbability(decksize, plains_sources, 7, 1, 2, on_play)
+    p_1c = CardDrawnProbability(decksize - 1, colorless_sources - 1, 7, 1, 2, on_play)
+    p_bm = CardDrawnProbability(decksize, 2, 7, 1, 2, on_play)
+    p_birth = p_1p * p_1c * p_bm
+    print("birth: ", p_birth)
+        
+    # 4x llanowar elves
+    p_1g = CardDrawnProbability(decksize, forest_sources, 7, 1, 3, on_play)
+    p_2c = CardDrawnProbability(decksize - 1, colorless_sources - 1, 7, 2, 3, on_play)
+    p_1l = CardDrawnProbability(decksize, 4, 7, 1, 3, on_play)
+    p_llano = p_1g * p_2c * p_1l
+    print("llano: ", p_llano)
+
+    # 4x mire triton
+    p_1b = CardDrawnProbability(decksize, swamp_sources, 7, 1, 2, on_play)
+    p_1c = CardDrawnProbability(decksize - 1, colorless_sources - 1, 7, 1, 2, on_play)
+    p_mt = CardDrawnProbability(80, 4, 7, 1, 2, 1)
+    p_mire = p_1b * p_1c * p_mt
+    print("mire: ", p_mire)
+
+    return p_adv + p_birth + p_llano + p_mire
 
 
 ##probs = CardDrawnProbability(decksize, total_lands_in_deck, opening_hand_size, desired_lands, by_turn, on_play)
@@ -110,3 +135,6 @@ print("mire + eerie on turn: ", ult_mire_prob)
 
 p_ad = GoodAdventureOpenerIndatha(80, swamps, forests, plains, colorless, 1)
 print("adventure opener: ", p_ad)
+
+p_eerie_open = GoodOpenerEerionAdventures(80, swamps, forests, plains, colorless, 1)
+print("eerie good opener: ", p_eerie_open)
